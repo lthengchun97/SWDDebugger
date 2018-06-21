@@ -33,5 +33,6 @@ void jtagToSWDSwSeq(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
 void readIDCode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
 void swdSendBit(uint16_t pin1,uint16_t pin2,int highOrLow);
 void swdClock(uint16_t pin2);
+void turnAround();
 
 #endif /* DEBUG_H_ */

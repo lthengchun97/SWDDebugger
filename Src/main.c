@@ -102,6 +102,7 @@ int main(void)
   jtagToSWDSwSeq(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
   swdLineReset(GPIO_PIN_8,GPIO_PIN_14);
   readIDCode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
+  turnAround();
 
 
   /* USER CODE END 2 */

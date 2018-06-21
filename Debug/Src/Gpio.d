@@ -1,4 +1,3 @@
-Src/Gpio.o: ../Src/Gpio.c \
- C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/GPIO.h
+Src/Gpio.o: ../Src/Gpio.c C:/Students/tc/SWDDebugger/Inc/GPIO.h
 
-C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/GPIO.h:
+C:/Students/tc/SWDDebugger/Inc/GPIO.h:
