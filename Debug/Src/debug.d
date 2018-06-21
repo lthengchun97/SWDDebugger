@@ -1,5 +1,5 @@
-Src/main.o: ../Src/main.c \
- C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/main.h \
+Src/debug.o: ../Src/debug.c \
+ C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/debug.h \
  C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/stm32f1xx_hal_conf.h \
  C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/main.h \
@@ -21,9 +21,9 @@ Src/main.o: ../Src/main.c \
  C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
- C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/debug.h
+ C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/main.h
 
-C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/main.h:
+C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/debug.h:
 
 C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 
@@ -67,4 +67,4 @@ C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1
 
 C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 
-C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/debug.h:
+C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/main.h:
