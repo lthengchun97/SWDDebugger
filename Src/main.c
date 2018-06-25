@@ -110,14 +110,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {/*
-  1.	Perform line reset
-  2.	Switch sequence of jtag to SWD
-  3.	Perform line reset
-  4.	Access to IDCODE register and read the value
-  */
-
-	  swdClock(GPIO_PIN_14);
+  {
+	 //swdClock(GPIO_PIN_14);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

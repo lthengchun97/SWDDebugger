@@ -1,3 +1,3 @@
-Src/Rcc.o: ../Src/Rcc.c C:/Students/tc/SWDDebugger/Inc/Rcc.h
+Src/Rcc.o: ../Src/Rcc.c C:/student/tc/SWDDebugger/Inc/Rcc.h
 
-C:/Students/tc/SWDDebugger/Inc/Rcc.h:
+C:/student/tc/SWDDebugger/Inc/Rcc.h:

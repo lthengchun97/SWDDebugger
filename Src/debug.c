@@ -21,7 +21,7 @@ void swdLineReset(uint16_t pin1,uint16_t pin2){
 	// pin2 stands for SWCLK pin (pin 14 port B)
 	int i;
 	HAL_GPIO_WritePin(GPIOA, pin1, 1);
-	for(i=0;i<50;i++)
+	for(i=0;i<56;i++)
 	{
 		HAL_GPIO_WritePin(GPIOB, pin2, 0);
 		HAL_Delay(100);
@@ -79,6 +79,9 @@ void swdSendBit(uint16_t pin1,uint16_t pin2,int highOrLow){
 
 void turnAround(){
 	GPIO_InitTypeDef GPIO_InitStruct;
+	int i;
+
+	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 0);
 
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
 	HAL_Delay(100);
@@ -87,7 +90,31 @@ void turnAround(){
 
 	GPIO_InitStruct.Pin = GPIO_PIN_8;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	for(i=0;i<1;i++)
+		{
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
+			HAL_Delay(100);
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+			HAL_Delay(100);
+		}
+
+	GPIO_InitStruct.Pin = GPIO_PIN_8;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
+
+	for(i=0;i<36;i++)
+			{
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
+				HAL_Delay(100);
+				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+				HAL_Delay(100);
+			}
 
 }
 
