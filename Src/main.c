@@ -98,11 +98,15 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
+  // All the initialization sequence
   swdLineReset(GPIO_PIN_8,GPIO_PIN_14);
   jtagToSWDSwSeq(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
   swdLineReset(GPIO_PIN_8,GPIO_PIN_14);
   readIDCode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
   turnAround();
+
+  // Write a data to a debug port
+  // The 8 bit sequence : 1
 
 
   /* USER CODE END 2 */
@@ -218,7 +222,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : PB13 PB14 */
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 

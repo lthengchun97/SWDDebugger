@@ -101,24 +101,63 @@ void turnAround(){
 			HAL_Delay(100);
 		}
 
-	GPIO_InitStruct.Pin = GPIO_PIN_8;
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8);
-
-	for(i=0;i<36;i++)
-			{
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
-				HAL_Delay(100);
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-				HAL_Delay(100);
-			}
+	returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
 
 }
 
+void returnIDcode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2){
+	int i;
+	GPIO_InitTypeDef GPIO_InitStruct;
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+	GPIO_InitStruct.Pin = GPIO_PIN_8;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,1);
+
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,1);
+
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,1);
+	swdSendBit(pin1,pin2,0);
+	swdSendBit(pin1,pin2,0);
+}
 
 void readIDCode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2){
 	// pin1 stands for SWDIO pin (pin 8 port A)
