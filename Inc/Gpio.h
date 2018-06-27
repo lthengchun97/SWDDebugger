@@ -46,7 +46,7 @@ struct GpioReg {
 	volatile uint32_t inData;			//10h
 	volatile uint32_t outData;			//14h
 	volatile uint32_t bsrr; 			//18h
-	//volatile uint32_t bitData;			//18h
+	//volatile uint32_t bitData;		//18h
 	volatile uint32_t lock;				//1ch
 	volatile uint32_t altFuncLow;		//20h
 	volatile uint32_t altFuncHi;		//24h

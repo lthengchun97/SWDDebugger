@@ -34,7 +34,7 @@ void readIDCode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
 void swdSendBit(uint16_t pin1,uint16_t pin2,int highOrLow);
 void swdClock(uint16_t pin2);
 void turnAround();
-void returnIDcode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
+uint32_t returnIDcode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
 
 
 #endif /* DEBUG_H_ */

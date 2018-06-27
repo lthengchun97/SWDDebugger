@@ -44,6 +44,8 @@
 #include "debug.h"
 
 uint16_t swdSwSeq;
+uint32_t bitread;
+uint32_t bitread_lsb;
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -104,7 +106,8 @@ int main(void)
   swdLineReset(GPIO_PIN_8,GPIO_PIN_14);
   readIDCode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
   turnAround();
-
+  bitread = returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
+  bitread_lsb = bitread >> 15;
   // Write a data to a debug port
   // The 8 bit sequence : 1
 
