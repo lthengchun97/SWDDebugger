@@ -101,16 +101,16 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // All the initialization sequence
-  swdLineReset(GPIO_PIN_8,GPIO_PIN_14);
-  jtagToSWDSwSeq(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
-  swdLineReset(GPIO_PIN_8,GPIO_PIN_14);
-  readIDCode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
-  turnAround();
-  bitread = returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
-  bitread_lsb = bitread >> 15;
+  swdLineReset();
+  swdWriteBits(0xe79e,16);
+  swdLineReset();
+  swdWriteBits(0xa5,8);
+  readTurnAround();
+  bitread = swdReadBits(36);
+  //bitread = returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
+  //bitread_lsb = bitread >> 15;
   // Write a data to a debug port
   // The 8 bit sequence : 1
-
 
   /* USER CODE END 2 */
 
@@ -118,6 +118,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 	 //swdClock(GPIO_PIN_14);
   /* USER CODE END WHILE */
 

@@ -9,6 +9,7 @@ C_SRCS += \
 ../Src/Rcc.c \
 ../Src/debug.c \
 ../Src/main.c \
+../Src/statandcontrol.c \
 ../Src/stm32f1xx_hal_msp.c \
 ../Src/stm32f1xx_it.c \
 ../Src/system_stm32f1xx.c 
@@ -19,6 +20,7 @@ OBJS += \
 ./Src/Rcc.o \
 ./Src/debug.o \
 ./Src/main.o \
+./Src/statandcontrol.o \
 ./Src/stm32f1xx_hal_msp.o \
 ./Src/stm32f1xx_it.o \
 ./Src/system_stm32f1xx.o 
@@ -29,6 +31,7 @@ C_DEPS += \
 ./Src/Rcc.d \
 ./Src/debug.d \
 ./Src/main.d \
+./Src/statandcontrol.d \
 ./Src/stm32f1xx_hal_msp.d \
 ./Src/stm32f1xx_it.d \
 ./Src/system_stm32f1xx.d 

@@ -26,15 +26,19 @@
 #define	SW_CLK_L		0
 #define	SW_IO_H			1
 #define	SW_IO_L			0
+#define SWDCLK_Pin		((uint16_t)0x4000)
+#define	SWDIO_Pin		((uint16_t)0x0100)
 
 
-void swdLineReset(uint16_t pin1,uint16_t pin2);
-void jtagToSWDSwSeq(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
-void readIDCode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
+
+
+void swdLineReset();
 void swdSendBit(uint16_t pin1,uint16_t pin2,int highOrLow);
 void swdClock(uint16_t pin2);
-void turnAround();
+void readTurnAround();
 uint32_t returnIDcode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
+void swdWriteBits(uint32_t data, int bitsize);
+uint32_t* swdReadBits(int bitsize);
 
 
 #endif /* DEBUG_H_ */
