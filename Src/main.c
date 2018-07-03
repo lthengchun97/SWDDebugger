@@ -106,7 +106,8 @@ int main(void)
   swdLineReset();
   swdWriteBits(0xa5,8);
   readTurnAround();
-  bitread = swdReadBits(36);
+  bitread = swdReadBits(38);
+
   //bitread = returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
   //bitread_lsb = bitread >> 15;
   // Write a data to a debug port
@@ -118,8 +119,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  writeTurnAround();
+	  swdWriteBits(0xA1,8);
+	  readTurnAround();
+	  swdReadBits(3);
+	  writeTurnAround();
+	  swdWriteBits(0x4A4A4A4A,34);
 
-	 //swdClock(GPIO_PIN_14);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

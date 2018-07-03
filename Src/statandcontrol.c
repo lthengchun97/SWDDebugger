@@ -5,4 +5,5 @@
  *      Author: ME-D203-06
  */
 
+#include "statandcontrol.h"
 

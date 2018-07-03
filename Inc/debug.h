@@ -28,17 +28,17 @@
 #define	SW_IO_L			0
 #define SWDCLK_Pin		((uint16_t)0x4000)
 #define	SWDIO_Pin		((uint16_t)0x0100)
+#define CLOCK_SPD		100
 
 
 
 
 void swdLineReset();
-void swdSendBit(uint16_t pin1,uint16_t pin2,int highOrLow);
 void swdClock(uint16_t pin2);
-void readTurnAround();
-uint32_t returnIDcode(GPIO_TypeDef *GPIOx,uint16_t pin1,uint16_t pin2);
 void swdWriteBits(uint32_t data, int bitsize);
 uint32_t* swdReadBits(int bitsize);
+void writeTurnAround();
+void readTurnAround();
 
 
 #endif /* DEBUG_H_ */

@@ -13,6 +13,7 @@
 "Src/AFIO.o"
 "Src/Gpio.o"
 "Src/Rcc.o"
+"Src/abortreg.o"
 "Src/debug.o"
 "Src/main.o"
 "Src/statandcontrol.o"
