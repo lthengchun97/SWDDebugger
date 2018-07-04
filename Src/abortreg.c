@@ -6,3 +6,7 @@
  */
 
 #include "abortreg.h"
+#include "main.h"
+#include "debug.h"
+#include <stdint.h>
+

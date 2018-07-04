@@ -100,13 +100,42 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
+  resetDebugPin();
+  writeTurnAround();
+
   // All the initialization sequence
   swdLineReset();
-  swdWriteBits(0xe79e,16);
+  swdWriteBits(SW_EQ_CODE,16);
   swdLineReset();
-  swdWriteBits(0xa5,8);
+  //swdWriteBits(SW_IDCODE_RD,8);
+  SW_ShiftPacket(SW_IDCODE_RD,0);
+  resetDebugPin();
+  //readTurnAround();
+  //swdReadBits(38);
+
+  // Try to write a data to it
+  writeTurnAround();
+  swdWriteBits(0xA1,8);				// 0x85 when is from LSB
   readTurnAround();
-  bitread = swdReadBits(38);
+  swdReadBits(3);
+  writeTurnAround();
+  swdWriteBits(0x4A4A4A4A,34);		// 0x52 when is from LSB
+  resetDebugPin();
+  idleCycles(2);
+
+  // Read the data from it
+  writeTurnAround();
+  swdWriteBits(0xA1,8);
+  readTurnAround();
+  swdReadBits(38);
+
+  // Read the status flag from the status/control register
+  writeTurnAround();
+  swdWriteBits(SW_STATUS_FLG,8);
+  readTurnAround();
+  swdReadBits(38);
+  writeTurnAround();
+
 
   //bitread = returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);
   //bitread_lsb = bitread >> 15;
@@ -119,12 +148,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  writeTurnAround();
-	  swdWriteBits(0xA1,8);
-	  readTurnAround();
-	  swdReadBits(3);
-	  writeTurnAround();
-	  swdWriteBits(0x4A4A4A4A,34);
+
 
   /* USER CODE END WHILE */
 
