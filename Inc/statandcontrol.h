@@ -8,6 +8,9 @@
 #ifndef STATANDCONTROL_H_
 #define STATANDCONTROL_H_
 
+
+// For DP :
+
 #define OR_UNDETECT		1			// (RoW)Overrun detection
 #define STICKYORUN		1<<1		// (RoW)Check overrun status
 #define	TRNMODE_EN(x)	x<<2		// (RoW)Set the transfer mode for AP operations
@@ -25,5 +28,6 @@
 #define	CSYSPWRUPREEQ	1<<30		// System powerup request
 #define CSYSPWRUPACK	1<<31		// System powerup acknowledege
 
+// For AP :
 
 #endif /* STATANDCONTROL_H_ */

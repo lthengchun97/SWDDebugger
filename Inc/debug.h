@@ -63,7 +63,7 @@
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);	\
 			GPIO_InitStruct.Pin = GPIO_PIN_8;	\
 			GPIO_InitStruct.Mode = GPIO_MODE_INPUT;	\
-			GPIO_InitStruct.Pull = GPIO_NOPULL;	\
+			GPIO_InitStruct.Pull = GPIO_PULLDOWN;	\
 			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; \
 			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		\
 		}while (0)
@@ -86,6 +86,6 @@ uint32_t swdReadBits(int bitsize);
 void writeTurnAround();
 void readTurnAround();
 void resetDebugPin();
-uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry);
+uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat);
 
 #endif /* DEBUG_H_ */

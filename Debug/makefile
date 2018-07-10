@@ -28,13 +28,13 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: SWDDebugger.elf
+all: SWD\ Debugger.elf
 
 # Tool invocations
-SWDDebugger.elf: $(OBJS) $(USER_OBJS) ../STM32F103C8Tx_FLASH.ld
+SWD\ Debugger.elf: $(OBJS) $(USER_OBJS) ../STM32F103C8Tx_FLASH.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -specs=nosys.specs -specs=nano.specs -T"../STM32F103C8Tx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "SWDDebugger.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
+	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -specs=nosys.specs -specs=nano.specs -T"../STM32F103C8Tx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "SWD Debugger.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
@@ -46,8 +46,8 @@ clean:
 
 post-build:
 	-@echo 'Generating hex and Printing size information:'
-	arm-none-eabi-objcopy -O ihex "SWDDebugger.elf" "SWDDebugger.hex"
-	arm-none-eabi-size "SWDDebugger.elf"
+	arm-none-eabi-objcopy -O ihex "SWD Debugger.elf" "SWD Debugger.hex"
+	arm-none-eabi-size "SWD Debugger.elf"
 	-@echo ' '
 
 .PHONY: all clean dependents

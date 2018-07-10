@@ -83,7 +83,8 @@ int main(void)
   /* MCU Configuration----------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+
+	HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -108,33 +109,33 @@ int main(void)
   swdWriteBits(SW_EQ_CODE,16);
   swdLineReset();
   //swdWriteBits(SW_IDCODE_RD,8);
-  SW_ShiftPacket(SW_IDCODE_RD,0);
+  SW_ShiftPacket(SW_IDCODE_RD,0,0);
   resetDebugPin();
   //readTurnAround();
   //swdReadBits(38);
 
   // Try to write a data to it
-  writeTurnAround();
-  swdWriteBits(0xA1,8);				// 0x85 when is from LSB
-  readTurnAround();
-  swdReadBits(3);
-  writeTurnAround();
-  swdWriteBits(0x4A4A4A4A,34);		// 0x52 when is from LSB
-  resetDebugPin();
-  idleCycles(2);
+  //writeTurnAround();
+  //swdWriteBits(0xA1,8);				// 0x85 when is from LSB
+  //readTurnAround();
+  //swdReadBits(3);
+  //writeTurnAround();
+  //swdWriteBits(0x4A4A4A4A,34);		// 0x52 when is from LSB
+  //resetDebugPin();
+  //idleCycles(2);
 
   // Read the data from it
-  writeTurnAround();
-  swdWriteBits(0xA1,8);
-  readTurnAround();
-  swdReadBits(38);
+  //writeTurnAround();
+  //swdWriteBits(0xA1,8);
+  //readTurnAround();
+  //swdReadBits(38);
 
   // Read the status flag from the status/control register
-  writeTurnAround();
-  swdWriteBits(SW_STATUS_FLG,8);
-  readTurnAround();
-  swdReadBits(38);
-  writeTurnAround();
+  //writeTurnAround();
+  //swdWriteBits(SW_STATUS_FLG,8);
+  //readTurnAround();
+  //swdReadBits(38);
+  //writeTurnAround();
 
 
   //bitread = returnIDcode(GPIOA,GPIO_PIN_8,GPIO_PIN_14);

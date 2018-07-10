@@ -5,7 +5,7 @@
  *      Author: Lee Theng Chun
  */
 #include "debug.h"
-//#include "main.h"
+#include "main.h"
 #include <stdint.h>
 
 uint8_t ack_err;
@@ -53,9 +53,9 @@ uint32_t swdReadBits(int bitsize){
 	uint32_t swiftBytes[bitsize];
 	for(i=0;i<bitsize;i++){
 		swiftBytes[i] = HAL_GPIO_ReadPin(GPIOA,(SWDIO_Pin >> i) & 0x01);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
-		HAL_Delay(CLOCK_SPD);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
 	}
 	return *swiftBytes;
@@ -103,7 +103,7 @@ void writeTurnAround(){
 
 }
 
-uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry)
+uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
 {
 	uint8_t ack, limit,i, io_b1,io_b2,io_b3,io_byte,iob_0;
 
@@ -162,10 +162,12 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry)
         if (request & 0x04)
         {
             // Swap endian order while shifting in 32-bits of data
-        	_swdAsOuput();
+        	//_swdAsOuput();
         	idleCycles(1);
-        	swdWriteBits(SW_EQ_IDCODE, 32);
-        	//readData = swdReadBits(32);
+
+        	//swdWriteBits(SW_EQ_IDCODE, 32);
+        	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+        	readData = swdReadBits(32);
 
             // Shift in the parity bit
             //iob_0 = swdReadBits(1);
@@ -182,7 +184,7 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry)
             _swdAsOuput();
             idleCycles(1);
             // Swap endian order while shifting out 32-bits of data
-            swdWriteBits(SW_EQ_IDCODE, 32);
+            swdWriteBits(writeDat, 32);
 
             // Shift out the parity bit
             //SWDIO_Out = SW_CalcDataParity(); _StrobeSWCLK;
