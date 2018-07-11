@@ -1,3 +1,4 @@
-Src/Rcc.o: ../Src/Rcc.c C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/Rcc.h
+Src/Rcc.o: ../Src/Rcc.c \
+ C:/Users/ME-D203-06/Desktop/ltc/SWDDebugger/Inc/Rcc.h
 
-C:/Users/Asus/Desktop/Ltc/SWD\ Debugger/Inc/Rcc.h:
+C:/Users/ME-D203-06/Desktop/ltc/SWDDebugger/Inc/Rcc.h:
