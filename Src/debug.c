@@ -190,7 +190,6 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
             //SWDIO_Out = SW_CalcDataParity(); _StrobeSWCLK;
         }
     }
-    // TODO: Add error (FAULT, line, parity) handling here?  RESEND on parity error?
 
     // Turnaround or idle cycle, always leave SWDIO an output
     HAL_GPIO_WritePin(GPIOA, SWDIO_Pin, SW_IO_L);
@@ -205,4 +204,27 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
     return ack;
 }
 
+uint8_t swdReadByte(uint32_t addr){
 
+	return 0;
+}
+
+uint16_t swdReadHalfWord(uint32_t addr){
+	return 0;
+}
+
+uint32_t swdReadWord(uint32_t addr){
+	return 0;
+}
+
+void swdWriteByte(uint32_t addr,uint8_t data){
+
+}
+
+void swdWriteHalfWord(uint32_t addr,uint16_t data){
+
+}
+
+void swdWriteWord(uint32_t addr,uint32_t data){
+
+}

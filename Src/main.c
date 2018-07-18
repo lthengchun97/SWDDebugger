@@ -86,6 +86,8 @@ int main(void)
 
 
 
+
+
 	HAL_Init();
 
   /* USER CODE BEGIN Init */
@@ -103,8 +105,8 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
-  resetDebugPin();
-  writeTurnAround();
+  //resetDebugPin();
+  //writeTurnAround();
 
   // All the initialization sequence
   swdLineReset();
@@ -112,10 +114,18 @@ int main(void)
   swdLineReset();
   //swdWriteBits(SW_IDCODE_RD,8);
   SW_ShiftPacket(SW_IDCODE_RD,0,0);
-  resetDebugPin();
+  //resetDebugPin();
   //readTurnAround();
   //swdReadBits(38);
 
+  // set the CDBGPWRUPREQ and CSYSPWRUPREQ bits of CTRL/STATUS
+  SW_ShiftPacket(0xA3,0,0x20000000);
+  // Write 0x000000F0 to SELECT (select AHB-AP, bank 0xF)
+  SW_ShiftPacket(0xA9,0,0x000000F0);
+  //Read the IDR CODE
+  SW_ShiftPacket(0xAF,0,0x000000F0);
+  // Write 0x00000000 to SELECT (select AHB-AP, bank 0x0)
+  SW_ShiftPacket(0xA9,0,0x00000000);
   // Try to write a data to it
   //writeTurnAround();
   //swdWriteBits(0xA1,8);				// 0x85 when is from LSB
