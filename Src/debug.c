@@ -205,26 +205,76 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
 }
 
 uint8_t swdReadByte(uint32_t addr){
-
-	return 0;
+	int i;
+	uint8_t returnValue[7];
+	for(i = 0; i<8; i++)
+	{
+		//returnValue[i]=HAL_GPIO_ReadPin(GPIOA,(addr >> i) & 0x01);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
+	return returnValue;
 }
 
 uint16_t swdReadHalfWord(uint32_t addr){
-	return 0;
+	int i;
+	uint8_t returnValue[16];
+	for(i = 0; i<16; i++)
+	{
+		//returnValue[i]=HAL_GPIO_ReadPin(GPIOA,(addr >> i) & 0x01);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
+	return returnValue;
 }
 
 uint32_t swdReadWord(uint32_t addr){
-	return 0;
+	int i;
+	uint8_t returnValue[32];
+	for(i = 0; i<32; i++)
+	{
+		//returnValue[i]=HAL_GPIO_ReadPin(GPIOA,(addr >> i) & 0x01);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
+	return returnValue;
 }
 
 void swdWriteByte(uint32_t addr,uint8_t data){
-
+	int i;
+	for(i=0;i<8;i++){
+		//HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
 }
 
 void swdWriteHalfWord(uint32_t addr,uint16_t data){
-
+	int i;
+	for(i=0;i<16;i++){
+		//HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
 }
 
 void swdWriteWord(uint32_t addr,uint32_t data){
-
+	int i;
+	for(i=0;i<32;i++){
+		//HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
 }

@@ -15,6 +15,8 @@
 #define TRUE 	1
 #define FALSE 	0
 
+#define
+
 #define SW_EQ_IDCODE			0xEE2005DC
 #define	SW_EQ_CODE				(0xe79e)
 #define SW_IDCODE_RD            0xA5
