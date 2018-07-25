@@ -89,7 +89,6 @@ int main(void)
 
 
 	HAL_Init();
-
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -112,20 +111,36 @@ int main(void)
   swdLineReset();
   swdWriteBits(SW_EQ_CODE,16);
   swdLineReset();
-  //swdWriteBits(SW_IDCODE_RD,8);
   SW_ShiftPacket(SW_IDCODE_RD,0,0);
   //resetDebugPin();
   //readTurnAround();
   //swdReadBits(38);
 
-  // set the CDBGPWRUPREQ and CSYSPWRUPREQ bits of CTRL/STATUS
+  // Set the CDBGPWRUPREQ and CSYSPWRUPREQ bits of CTRL/STATUS
   SW_ShiftPacket(0xA3,0,0x20000000);
   // Write 0x000000F0 to SELECT (select AHB-AP, bank 0xF)
   SW_ShiftPacket(0xA9,0,0x000000F0);
-  //Read the IDR CODE
+  // Read the IDR CODE
   SW_ShiftPacket(0xAF,0,0x000000F0);
   // Write 0x00000000 to SELECT (select AHB-AP, bank 0x0)
   SW_ShiftPacket(0xA9,0,0x00000000);
+  // Set the size field of CSW to 0x2 (32-bit transfer)
+  SW_ShiftPacket(0xAB,0,0x00000010);
+  // Start using TAR/DRW to access internal memory
+  SW_ShiftPacket(0xAB,0,0x00000010);
+
+
+  HAL_Delay(100);
+  bitread = tarWriteandReadAccess(0x20000000,0x12345678);
+
+  // OxEOOEDF4 is the Debug Core Register Selector Register
+  init_ldr();
+  bitread = tarReadAccess(0xE000EDF4);
+
+
+
+
+
   // Try to write a data to it
   //writeTurnAround();
   //swdWriteBits(0xA1,8);				// 0x85 when is from LSB

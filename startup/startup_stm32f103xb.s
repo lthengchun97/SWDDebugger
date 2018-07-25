@@ -50,6 +50,7 @@
 
 .global g_pfnVectors
 .global Default_Handler
+.global init_ldr
 
 /* start address for the initialization values of the .data section.
 defined in linker script */
@@ -114,6 +115,22 @@ LoopFillZerobss:
   bl main
   bx lr
 .size Reset_Handler, .-Reset_Handler
+
+init_ldr:
+	ldr r0,=1
+	ldr r1,=1
+	ldr r2,=0
+	ldr r3,=1
+	ldr r4,=0
+	ldr r5,=1
+	ldr r6,=1
+	ldr r7,=1
+	ldr r8,=0
+	ldr r9,=0
+	ldr r10,=1
+	ldr r11,=1
+	ldr r12,=0
+	//b Infinite_Loop
 
 /**
  * @brief  This is the code that gets called when the processor receives an

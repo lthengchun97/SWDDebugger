@@ -234,10 +234,10 @@ uint16_t swdReadHalfWord(uint32_t addr){
 
 uint32_t swdReadWord(uint32_t addr){
 	int i;
-	uint8_t returnValue[32];
+	uint32_t returnValue;
 	for(i = 0; i<32; i++)
 	{
-		//returnValue[i]=HAL_GPIO_ReadPin(GPIOA,(addr >> i) & 0x01);
+		returnValue = (addr >> i) & 0x01;
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
@@ -277,4 +277,32 @@ void swdWriteWord(uint32_t addr,uint32_t data){
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
+}
+
+uint32_t tarWriteandReadAccess(uint32_t addr,uint32_t data){
+	uint32_t value;
+	// To access to the TAR register
+	SW_ShiftPacket(0xAB,0,0x00000000);
+	// Write the address to TAR register
+	SW_ShiftPacket(0xAB,0,addr);
+	// To access to the DRW register
+	SW_ShiftPacket(0xAB,0,0x00000000);
+	// Write the data to the DRW register
+	SW_ShiftPacket(0xAB,0,data);
+	// Read the value from the DRW register
+	value=swdReadWord(data);
+	return value;
+}
+
+uint32_t tarReadAccess(uint32_t addr){
+	uint32_t value;
+	// To access to the TAR register
+	SW_ShiftPacket(0xAB,0,0x00000000);
+	// Write the address to TAR register
+	SW_ShiftPacket(0xAB,0,addr);
+	// To access to the DRW register
+	SW_ShiftPacket(0xAB,0,0x00000000);
+	// Read the value from the DRW register
+	value=swdReadWord(addr);
+	return value;
 }

@@ -15,7 +15,7 @@
 #define TRUE 	1
 #define FALSE 	0
 
-#define
+
 
 #define SW_EQ_IDCODE			0xEE2005DC
 #define	SW_EQ_CODE				(0xe79e)
@@ -89,5 +89,8 @@ void writeTurnAround();
 void readTurnAround();
 void resetDebugPin();
 uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat);
+uint32_t tarWriteandReadAccess(uint32_t addr,uint32_t data);
+uint32_t tarReadAccess(uint32_t addr);
+uint32_t swdReadWord(uint32_t addr);
 
 #endif /* DEBUG_H_ */
