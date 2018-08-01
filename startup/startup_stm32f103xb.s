@@ -130,7 +130,7 @@ init_ldr:
 	ldr r10,=1
 	ldr r11,=1
 	ldr r12,=0
-	//b Infinite_Loop
+	b Infinite_Loop
 
 /**
  * @brief  This is the code that gets called when the processor receives an

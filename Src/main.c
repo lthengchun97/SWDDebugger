@@ -44,8 +44,9 @@
 #include "debug.h"
 
 uint16_t swdSwSeq;
+uint8_t test8;
 uint32_t bitread;
-uint32_t bitread_lsb;
+uint32_t *bitread_lsb;
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -108,34 +109,44 @@ int main(void)
   //writeTurnAround();
 
   // All the initialization sequence
-  swdLineReset();
-  swdWriteBits(SW_EQ_CODE,16);
-  swdLineReset();
-  SW_ShiftPacket(SW_IDCODE_RD,0,0);
-  //resetDebugPin();
+  //swdLineReset();
+  //swdWriteBits(SW_EQ_CODE,16);
+  bitread = swdReadBits(32,*bitread_lsb);
+  //swdLineReset();
+  //swdWriteBits(SW_IDCODE_RD,8);
+  //bitread = SWDIO_Pin;
+
+
   //readTurnAround();
-  //swdReadBits(38);
+  //bitread=swdReadBits(38);
+
+  //test8= SW_Request(0x01);
+  //SW_ShiftPacket(SW_IDCODE_RD,0,0);
+  //resetDebugPin();
+
+
+
 
   // Set the CDBGPWRUPREQ and CSYSPWRUPREQ bits of CTRL/STATUS
-  SW_ShiftPacket(0xA3,0,0x20000000);
+  //SW_ShiftPacket(0xA3,0,0x20000000);
   // Write 0x000000F0 to SELECT (select AHB-AP, bank 0xF)
-  SW_ShiftPacket(0xA9,0,0x000000F0);
+  //SW_ShiftPacket(0xA9,0,0x000000F0);
   // Read the IDR CODE
-  SW_ShiftPacket(0xAF,0,0x000000F0);
+  //SW_ShiftPacket(0xAF,0,0x000000F0);
   // Write 0x00000000 to SELECT (select AHB-AP, bank 0x0)
-  SW_ShiftPacket(0xA9,0,0x00000000);
+  //SW_ShiftPacket(0xA9,0,0x00000000);
   // Set the size field of CSW to 0x2 (32-bit transfer)
-  SW_ShiftPacket(0xAB,0,0x00000010);
+  //SW_ShiftPacket(0xAB,0,0x00000010);
   // Start using TAR/DRW to access internal memory
-  SW_ShiftPacket(0xAB,0,0x00000010);
+  //SW_ShiftPacket(0xAB,0,0x00000010);
 
 
   HAL_Delay(100);
-  bitread = tarWriteandReadAccess(0x20000000,0x12345678);
+  //bitread = tarWriteandReadAccess(0x20000000,0x12345678);
 
   // OxEOOEDF4 is the Debug Core Register Selector Register
-  init_ldr();
-  bitread = tarReadAccess(0xE000EDF4);
+  //init_ldr();
+  //bitread = tarReadAccess(0xE000EDF4);
 
 
 

@@ -9,7 +9,17 @@
 #include <stdint.h>
 
 uint8_t ack_err;
-uint32_t readData;
+uint32_t readData,io_word;
+uint8_t	iob_0;
+typedef unsigned char STATUS;
+
+const uint8_t even_parity[] =
+{
+    0x00, 0x10, 0x10, 0x00,
+    0x10, 0x00, 0x00, 0x10,
+    0x10, 0x00, 0x00, 0x10,
+    0x00, 0x10, 0x10, 0x00
+};
 
 void idleCycles(int time){
 	// pin2 stands for SWCLK pin (pin 14 port B)
@@ -39,8 +49,10 @@ void swdLineReset(){
 
 void swdWriteBits(uint32_t data, int bitsize){
 	int i;
+	uint32_t data1=0;
 	for(i=0;i<bitsize;i++){
 		HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
+		//data1 = data1 | (HAL_GPIO_ReadPin(GPIOA,(data>> i)&0x01)>>i);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
@@ -48,17 +60,18 @@ void swdWriteBits(uint32_t data, int bitsize){
 	}
 }
 
-uint32_t swdReadBits(int bitsize){
+uint32_t swdReadBits(int bitsize,uint32_t *data){
 	int i;
-	uint32_t swiftBytes[bitsize];
+	uint32_t swiftBytes;
 	for(i=0;i<bitsize;i++){
-		swiftBytes[i] = HAL_GPIO_ReadPin(GPIOA,(SWDIO_Pin >> i) & 0x01);
+		*data = SW_EQ_IDCODE;
+		swiftBytes |= (HAL_GPIO_ReadPin(GPIOA,SWDIO_Pin)>>i);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
 	}
-	return *swiftBytes;
+	return swiftBytes;
 }
 
 void resetDebugPin(){
@@ -67,9 +80,9 @@ void resetDebugPin(){
 
 void readTurnAround(){
 	int i;
-	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, 0);
+	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
 	HAL_Delay(CLOCK_SPD);
-	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, 1);
+	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
 	HAL_Delay(CLOCK_SPD);
 
 	_swdAsInput();
@@ -122,6 +135,7 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
         _swdAsOuput();
         idleCycles(1);
 
+
         // Shift out the 8-bit packet request
         swdWriteBits(request,8);
 
@@ -167,7 +181,7 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
 
         	//swdWriteBits(SW_EQ_IDCODE, 32);
         	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
-        	readData = swdReadBits(32);
+        	//readData = swdReadBits(32);
 
             // Shift in the parity bit
             //iob_0 = swdReadBits(1);
@@ -232,19 +246,19 @@ uint16_t swdReadHalfWord(uint32_t addr){
 	return returnValue;
 }
 
-uint32_t swdReadWord(uint32_t addr){
+/*uint32_t swdReadWord(debug addr){
 	int i;
 	uint32_t returnValue;
 	for(i = 0; i<32; i++)
 	{
-		returnValue = (addr >> i) & 0x01;
+		//returnValue[i] = (addr->data >> i) & 0x01;
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
 		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 	return returnValue;
-}
+}*/
 
 void swdWriteByte(uint32_t addr,uint8_t data){
 	int i;
@@ -290,7 +304,7 @@ uint32_t tarWriteandReadAccess(uint32_t addr,uint32_t data){
 	// Write the data to the DRW register
 	SW_ShiftPacket(0xAB,0,data);
 	// Read the value from the DRW register
-	value=swdReadWord(data);
+	//value=swdReadWord(data);
 	return value;
 }
 
@@ -303,6 +317,115 @@ uint32_t tarReadAccess(uint32_t addr){
 	// To access to the DRW register
 	SW_ShiftPacket(0xAB,0,0x00000000);
 	// Read the value from the DRW register
-	value=swdReadWord(addr);
+	//value=swdReadWord(addr);
 	return value;
 }
+/*
+void SW_DAP_Read(uint8_t cnt, uint8_t DAP_Addr, uint32_t * read_data)
+{
+	uint8_t req;
+
+    // Format the packet request header
+    req = SW_Request(DAP_Addr);
+
+    // Shift the first packet and if DP access, send the results
+    SW_ShiftPacket(req, 0);
+    if (!(req & 0x02))
+    {
+        *read_data = io_word;
+        read_data++;
+    }
+
+    // Perform the requested number of reads
+    for (; cnt != 0; cnt--)
+    {
+        SW_ShiftPacket(req, 0);
+        *read_data = io_word;
+        read_data++;
+    }
+
+    // For AP access, get and send results of the last read
+    if (req & 0x02)
+    {
+        SW_ShiftPacket(0xBD, 0);
+        *read_data = io_word;
+        read_data++;
+    }
+}
+*/
+uint8_t SW_Request(uint8_t addr){
+	uint8_t data_req;
+
+	data_req= addr | DAP_CMD_MASK;
+	data_req = data_req | even_parity[data_req];
+	data_req = data_req << 1;
+	data_req = data_req | SW_REQ_PARK_START;
+
+	return data_req;
+}
+
+STATUS SW_Response(uint8_t sw_ack){
+	switch(sw_ack)
+	{
+	case SW_ACK_OK : return HOST_COMMAND_OK;
+	case SW_ACK_WAIT : return HOST_AP_TIMEOUT;
+	case SW_ACK_FAULT : return HOST_ACK_FAULT;
+	default : return HOST_WIRE_ERROR;
+	}
+}
+
+
+/*
+void SW_ShiftByteOut(uint8_t byte){
+	_swdAsOutput();
+
+	io_byte = byte;
+
+	SWDIO_Pin = iob_0;
+	idleCycles(1);
+	SWDIO_Pin = iob_1;
+	idleCycles(1);
+	SWDIO_Pin = iob_2;
+	idleCycles(1);
+	SWDIO_Pin = iob_3;
+	idleCycles(1);
+	SWDIO_Pin = iob_4;
+	idleCycles(1);
+	SWDIO_Pin = iob_5;
+	idleCycles(1);
+	SWDIO_Pin = iob_6;
+	idleCycles(1);
+	SWDIO_Pin = iob_7;
+	idleCycles(1);
+}
+*/
+
+
+/*
+uint8_t SW_ShiftByteIn(void)
+{
+    // Make sure SWDIO is an input
+	_swdAsInput();
+
+    // Shift 8-bits in on SWDIO
+    iob_0 = SWDIO_Pin;
+    idleCycles(1);
+    iob_1 = SWDIO_Pin;
+    idleCycles(1);
+    iob_2 = SWDIO_Pin;
+    idleCycles(1);
+    iob_3 = SWDIO_Pin;
+    idleCycles(1);
+    iob_4 = SWDIO_Pin;
+    idleCycles(1);
+    iob_5 = SWDIO_Pin;
+    idleCycles(1);
+    iob_6 = SWDIO_Pin;
+    idleCycles(1);
+    iob_7 = SWDIO_Pin;
+    idleCycles(1);
+
+    // Return the byte that was shifted in
+    return io_byte;
+}
+*/
