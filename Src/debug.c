@@ -5,6 +5,7 @@
  *      Author: Lee Theng Chun
  */
 #include "debug.h"
+#include "mockFunction.h"
 #include "main.h"
 #include <stdint.h>
 
@@ -25,9 +26,9 @@ void idleCycles(int time){
 	// pin2 stands for SWCLK pin (pin 14 port B)
 	int i;
 	for(i=0;i<time;i++){
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 }
@@ -36,12 +37,12 @@ void swdLineReset(){
 	// pin1 stands for SWDIO pin (pin 8 port A)
 	// pin2 stands for SWCLK pin (pin 14 port B)
 	int i;
-	HAL_GPIO_WritePin(GPIOA, SWDIO_Pin, SW_IO_H);
+	HAL_GPIO_WritePin(SWD_IO_PORT, SWDIO_Pin, SW_IO_H);
 	for(i=0;i<64;i++)
 	{
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 }
@@ -49,26 +50,45 @@ void swdLineReset(){
 
 void swdWriteBits(uint32_t data, int bitsize){
 	int i;
-	uint32_t data1=0;
+	//uint32_t data1=0;
 	for(i=0;i<bitsize;i++){
-		HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
+		swdWriteIO(1);
+		HAL_GPIO_WritePin(SWD_IO_PORT,SWDIO_Pin,(data >> i) & 0x01);
 		//data1 = data1 | (HAL_GPIO_ReadPin(GPIOA,(data>> i)&0x01)>>i);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 }
+
+void swdWriteBitsmock(uint32_t data,int bitsize){
+	int i;
+	//uint32_t data1=0;
+	for(i=0;i<bitsize;i++){
+		swdWriteIO(1);
+		//HAL_GPIO_WritePin(SWD_IO_PORT,SWDIO_Pin,(data >> i) & 0x01);
+		//data1 = data1 | (HAL_GPIO_ReadPin(GPIOA,(data>> i)&0x01)>>i);
+		swdWriteClk(1);
+		//HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
+		HAL_Delay(CLOCK_SPD);
+		swdWriteClk(1);
+		//HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
+		HAL_Delay(CLOCK_SPD);
+	}
+}
+
+
 
 uint32_t swdReadBits(int bitsize,uint32_t *data){
 	int i;
 	uint32_t swiftBytes;
 	for(i=0;i<bitsize;i++){
 		*data = SW_EQ_IDCODE;
-		swiftBytes |= (HAL_GPIO_ReadPin(GPIOA,SWDIO_Pin)>>i);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		swiftBytes |= (HAL_GPIO_ReadPin(SWD_IO_PORT,SWDIO_Pin)>>i);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
 	}
 	return swiftBytes;
@@ -80,18 +100,18 @@ void resetDebugPin(){
 
 void readTurnAround(){
 	int i;
-	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+	HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 	HAL_Delay(CLOCK_SPD);
-	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+	HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 	HAL_Delay(CLOCK_SPD);
 
 	_swdAsInput();
 
 	for(i=0;i<1;i++)
 		{
-			HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+			HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 			HAL_Delay(CLOCK_SPD);
-			HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+			HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 			HAL_Delay(CLOCK_SPD);
 		}
 }
@@ -99,18 +119,18 @@ void readTurnAround(){
 void writeTurnAround(){
 
 	int i;
-	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, 0);
+	HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, 0);
 	HAL_Delay(CLOCK_SPD);
-	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, 1);
+	HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, 1);
 	HAL_Delay(CLOCK_SPD);
 
 	_swdAsOuput();
 
 	for(i=0;i<1;i++)
 		{
-			HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+			HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 			HAL_Delay(CLOCK_SPD);
-			HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+			HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 			HAL_Delay(CLOCK_SPD);
 		}
 
@@ -131,7 +151,7 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
     do
     {
         // Turnaround or idle cycle, makes or keeps SWDIO an output
-        HAL_GPIO_WritePin(GPIOA, SWDIO_Pin, SW_IO_L);
+        HAL_GPIO_WritePin(SWD_IO_PORT, SWDIO_Pin, SW_IO_L);
         _swdAsOuput();
         idleCycles(1);
 
@@ -145,11 +165,11 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
 
         // Shift in the 3-bit acknowledge response
         //swdReadBits(32);
-        io_b1 = HAL_GPIO_ReadPin(GPIOA, (SWDIO_Pin));
+        io_b1 = HAL_GPIO_ReadPin(SWD_IO_PORT, (SWDIO_Pin));
         idleCycles(1);
-        io_b2 = HAL_GPIO_ReadPin(GPIOA, (SWDIO_Pin >> 1) & 0x01);
+        io_b2 = HAL_GPIO_ReadPin(SWD_IO_PORT, (SWDIO_Pin >> 1) & 0x01);
         idleCycles(1);
-        io_b3 = HAL_GPIO_ReadPin(GPIOA, (SWDIO_Pin >> 2) & 0x01);
+        io_b3 = HAL_GPIO_ReadPin(SWD_IO_PORT, (SWDIO_Pin >> 2) & 0x01);
         idleCycles(1);
         io_byte = io_b1 | io_b2 | io_b3;
         ack = io_byte;
@@ -180,7 +200,7 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
         	idleCycles(1);
 
         	//swdWriteBits(SW_EQ_IDCODE, 32);
-        	HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+        	HAL_GPIO_WritePin(SWD_IO_PORT, SWDCLK_Pin, SW_CLK_H);
         	//readData = swdReadBits(32);
 
             // Shift in the parity bit
@@ -206,7 +226,7 @@ uint8_t SW_ShiftPacket(uint8_t request, uint8_t retry,uint32_t writeDat)
     }
 
     // Turnaround or idle cycle, always leave SWDIO an output
-    HAL_GPIO_WritePin(GPIOA, SWDIO_Pin, SW_IO_L);
+    HAL_GPIO_WritePin(SWD_IO_PORT, SWDIO_Pin, SW_IO_L);
     _swdAsOuput();
     idleCycles(1);
 
@@ -224,9 +244,9 @@ uint8_t swdReadByte(uint32_t addr){
 	for(i = 0; i<8; i++)
 	{
 		//returnValue[i]=HAL_GPIO_ReadPin(GPIOA,(addr >> i) & 0x01);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 	return returnValue;
@@ -238,9 +258,9 @@ uint16_t swdReadHalfWord(uint32_t addr){
 	for(i = 0; i<16; i++)
 	{
 		//returnValue[i]=HAL_GPIO_ReadPin(GPIOA,(addr >> i) & 0x01);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 	return returnValue;
@@ -264,9 +284,9 @@ void swdWriteByte(uint32_t addr,uint8_t data){
 	int i;
 	for(i=0;i<8;i++){
 		//HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 }
@@ -275,9 +295,9 @@ void swdWriteHalfWord(uint32_t addr,uint16_t data){
 	int i;
 	for(i=0;i<16;i++){
 		//HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 }
@@ -286,9 +306,9 @@ void swdWriteWord(uint32_t addr,uint32_t data){
 	int i;
 	for(i=0;i<32;i++){
 		//HAL_GPIO_WritePin(GPIOA,SWDIO_Pin,(data >> i) & 0x01);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_L);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_L);
 		HAL_Delay(CLOCK_SPD);
-		HAL_GPIO_WritePin(GPIOB, SWDCLK_Pin, SW_CLK_H);
+		HAL_GPIO_WritePin(SWD_CLOCK_PORT, SWDCLK_Pin, SW_CLK_H);
 		HAL_Delay(CLOCK_SPD);
 	}
 }
@@ -328,8 +348,10 @@ void SW_DAP_Read(uint8_t cnt, uint8_t DAP_Addr, uint32_t * read_data)
     // Format the packet request header
     req = SW_Request(DAP_Addr);
 
-    // Shift the first packet and if DP access, send the results
+    // Shift the first packet and if its DP access, send the results
     SW_ShiftPacket(req, 0);
+
+    // Check the acknowledge
     if (!(req & 0x02))
     {
         *read_data = io_word;

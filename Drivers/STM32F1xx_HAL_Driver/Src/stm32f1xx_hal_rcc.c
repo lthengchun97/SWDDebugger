@@ -103,7 +103,7 @@
   */
 
 #define MCO1_CLK_ENABLE()     __HAL_RCC_GPIOA_CLK_ENABLE()
-#define MCO1_GPIO_PORT        GPIOA
+#define MCO1_GPIO_PORT        SWD_IO_PORT
 #define MCO1_PIN              GPIO_PIN_8
 
 /**

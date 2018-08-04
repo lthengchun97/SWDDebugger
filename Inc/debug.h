@@ -89,34 +89,34 @@ struct debug {
 #define	_swdAsOuput()					\
 		do{								\
 			GPIO_InitTypeDef GPIO_InitStruct;	\
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);	\
+			HAL_GPIO_WritePin(SWD_IO_PORT, GPIO_PIN_8, GPIO_PIN_SET);	\
 			GPIO_InitStruct.Pin = GPIO_PIN_8;	\
 			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;	\
 			GPIO_InitStruct.Pull = GPIO_PULLUP;	\
 			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; \
-			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		\
+			HAL_GPIO_Init(SWD_IO_PORT, &GPIO_InitStruct);		\
 		}while (0)
 
 #define	_swdAsInput()					\
 		do{								\
 			GPIO_InitTypeDef GPIO_InitStruct;	\
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);	\
+			HAL_GPIO_WritePin(SWD_IO_PORT, GPIO_PIN_8, GPIO_PIN_SET);	\
 			GPIO_InitStruct.Pin = GPIO_PIN_8;	\
 			GPIO_InitStruct.Mode = GPIO_MODE_INPUT;	\
 			GPIO_InitStruct.Pull = GPIO_PULLDOWN;	\
 			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; \
-			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		\
+			HAL_GPIO_Init(SWD_IO_PORT, &GPIO_InitStruct);		\
 		}while (0)
 
 #define	_swdAsOuputOpenDrain()					\
 		do{								\
 			GPIO_InitTypeDef GPIO_InitStruct;	\
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);	\
+			HAL_GPIO_WritePin(SWD_IO_PORT, GPIO_PIN_8, GPIO_PIN_SET);	\
 			GPIO_InitStruct.Pin = GPIO_PIN_8;	\
 			GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;	\
 			GPIO_InitStruct.Pull = GPIO_PULLUP;	\
 			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; \
-			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);		\
+			HAL_GPIO_Init(SWD_IO_PORT, &GPIO_InitStruct);		\
 		}while (0)
 
 void swdLineReset();

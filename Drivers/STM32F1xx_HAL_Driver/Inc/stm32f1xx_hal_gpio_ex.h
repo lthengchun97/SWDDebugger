@@ -829,8 +829,8 @@ extern "C" {
                                    ((__GPIOx__) == (GPIOB))? 1U :\
                                    ((__GPIOx__) == (GPIOC))? 2U :3U)
 #elif defined(STM32F100xB) || defined(STM32F101xB) || defined(STM32F103xB) || defined(STM32F105xC) || defined(STM32F107xC)
-#define GPIO_GET_INDEX(__GPIOx__) (((__GPIOx__) == (GPIOA))? 0U :\
-                                   ((__GPIOx__) == (GPIOB))? 1U :\
+#define GPIO_GET_INDEX(__GPIOx__) (((__GPIOx__) == (SWD_IO_PORT))? 0U :\
+                                   ((__GPIOx__) == (SWD_CLOCK_PORT))? 1U :\
                                    ((__GPIOx__) == (GPIOC))? 2U :\
                                    ((__GPIOx__) == (GPIOD))? 3U :4U)
 #elif defined(STM32F100xE) || defined(STM32F101xE) || defined(STM32F101xG) || defined(STM32F103xE) || defined(STM32F103xG)
