@@ -30,7 +30,8 @@
     - +:test/**
     - -:test/support
   :include:
-    - Inc/**
+    - +:Inc/**
+    - +:Drivers/**  
   :source:
     - Src/**
   :support:

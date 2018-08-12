@@ -26,7 +26,8 @@
   :support:
   - test/support
   :include:
-  - Inc/**
+  - "+:Inc/**"
+  - "+:Drivers/**"
   :test_toolchain_include: []
   :release_toolchain_include: []
 :files:

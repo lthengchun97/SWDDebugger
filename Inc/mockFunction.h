@@ -9,7 +9,7 @@
 #define MOCKFUNCTION_H_
 #include <stdint.h>
 
-void swdWriteIO(int state);
+void swdWriteIO(int state,uint32_t data);
 void swdWriteClk(int state);
 void swdDelay(int cycles);
 
