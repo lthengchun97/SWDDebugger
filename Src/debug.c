@@ -49,7 +49,7 @@ void swdLineReset(){
 }
 
 
-void swdWriteBits(uint32_t data, int bitsize){
+void swdWriteBits1(uint32_t data, int bitsize){
 	int i;
 	for(i=0;i<bitsize;i++){
 		//swdWriteIO(1);
@@ -79,7 +79,7 @@ void swdWriteBitsmock(uint32_t data,int bitsize){
 
 
 
-uint32_t swdReadBits(int bitsize,uint32_t *data){
+uint32_t swdReadBits1(int bitsize,uint32_t *data){
 	int i;
 	uint32_t swiftBytes=0;
 	for(i=bitsize;i<=0;i--){
@@ -339,41 +339,7 @@ uint32_t tarReadAccess(uint32_t addr){
 	//value=swdReadWord(addr);
 	return value;
 }
-/*
-void SW_DAP_Read(uint8_t cnt, uint8_t DAP_Addr, uint32_t * read_data)
-{
-	uint8_t req;
 
-    // Format the packet request header
-    req = SW_Request(DAP_Addr);
-
-    // Shift the first packet and if its DP access, send the results
-    SW_ShiftPacket(req, 0);
-
-    // Check the acknowledge
-    if (!(req & 0x02))
-    {
-        *read_data = io_word;
-        read_data++;
-    }
-
-    // Perform the requested number of reads
-    for (; cnt != 0; cnt--)
-    {
-        SW_ShiftPacket(req, 0);
-        *read_data = io_word;
-        read_data++;
-    }
-
-    // For AP access, get and send results of the last read
-    if (req & 0x02)
-    {
-        SW_ShiftPacket(0xBD, 0);
-        *read_data = io_word;
-        read_data++;
-    }
-}
-*/
 uint8_t SW_computeParity(uint32_t data){
 	uint8_t data_req;
 
@@ -395,3 +361,5 @@ STATUS SW_Response(uint8_t sw_ack){
 	default : return HOST_WIRE_ERROR;
 	}
 }
+
+

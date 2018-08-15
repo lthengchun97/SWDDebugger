@@ -1,5 +1,5 @@
 ---
 - unity.h
-- debug.h
-- mockFunction.h
+- swdio.h
+- mock_swdioHardware.h
 - build/temp/_test_testmock.c

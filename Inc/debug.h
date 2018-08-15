@@ -8,7 +8,7 @@
 #ifndef DEBUG_H_
 #define DEBUG_H_
 
-#include"stdint.h"
+#include "stdint.h"
 #include "stm32f1xx_hal.h"
 #include "main.h"
 #include "stdio.h"
@@ -87,8 +87,8 @@ struct debug {
 
 void swdLineReset();
 void idleCycles(int time);
-void swdWriteBits(uint32_t data, int bitsize);
-uint32_t swdReadBits(int bitsize,uint32_t *data);
+void swdWriteBits1(uint32_t data, int bitsize);
+uint32_t swdReadBits1(int bitsize,uint32_t *data);
 void writeTurnAround();
 void readTurnAround();
 void resetDebugPin();

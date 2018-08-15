@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "debug.h"
-#include "mockFunction.h"
+#include "swdio.h"
+#include "mock_swdioHardware.h"
 
 
 void setUp(void)
@@ -11,7 +11,61 @@ void tearDown(void)
 {
 }
 
-void test_testmock_NeedToImplement(void)
+void test_testmock_write_one_bit(void)
 {
-    TEST_IGNORE_MESSAGE("Need to Implement testmock");
+  setSwdioHigh_Expect();      // 1
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  swdWriteBit(1);
+
+  setSwdioLow_Expect();       // 0
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  swdWriteBit(0);
+}
+
+void test_testmock_write_bits(void)
+{
+  setSwdioHigh_Expect();      // 1
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  setSwdioLow_Expect();      // 0
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  setSwdioLow_Expect();      // 0
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  swdWriteBits(0x001,3);
+}
+
+void test_testmock_read_bit(void)
+{
+  getSwdio_ExpectAndReturn(0);
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  getSwdio_ExpectAndReturn(0);
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  swdReadBits(2);
 }

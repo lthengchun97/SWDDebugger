@@ -41,16 +41,19 @@
 #include "stm32f1xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-#include "debug.h"
+//#include "debug.h"
+#include "swdio.h"
 
 uint16_t swdSwSeq;
 uint8_t test8;
 uint32_t bitread;
 volatile uint32_t *idCode=0;
 uint32_t *bitread_lsb;
+int testparity;
+uint32_t status;
 
 //Configure pin as output/input/open drain
-
+/*
 #define	_swdAsOuput()					\
 		do{								\
 			GPIO_InitTypeDef GPIO_InitStruct;	\
@@ -83,7 +86,7 @@ uint32_t *bitread_lsb;
 			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; \
 			HAL_GPIO_Init(SWD_IO_PORT, &GPIO_InitStruct);		\
 		}while (0)
-
+*/
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -144,16 +147,20 @@ int main(void)
 
   //resetDebugPin();
   //writeTurnAround();
-
+  //testparity = computeParityBit(0x9);
   // All the initialization sequence
-  swdLineReset();
-  swdWriteBits(SW_EQ_CODE,16);
+  //swdLineReset();
+  //swdWriteBits(SW_EQ_CODE,16);
   //bitread = swdReadBits(32,*bitread_lsb);
-  swdLineReset();
-  swdWriteBits(1,2);
-  _swdAsInput();
-  bitread=swdReadBits(3,&idCode);
+  //swdLineReset();
+  //swdWriteBits(1,2);
+  //_swdAsInput();
+  //bitread=swdReadBits(3,&idCode);
 
+  lineReset();
+  swdWriteBits(SW_EQ_CODE,16);
+  lineReset();
+  //status=SwdApDpRequest();
 
   //swdWriteBits(SW_IDCODE_RD,8);
   //bitread = SWDIO_Pin;
