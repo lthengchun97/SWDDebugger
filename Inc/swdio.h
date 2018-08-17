@@ -46,7 +46,7 @@ SwdStatus SwdApDpRequest(uint8_t request,uint32_t *data);
 void setSwdio(uint32_t data,int bitsize);
 int computeParityBit (uint32_t data);
 int computeParity(uint32_t data);
-void swdWrite32BitsWithParity(uint32_t data);
+void swdWrite32BitsWithParity(uint32_t *data);
 uint32_t swdReadAck();
 void lineReset();
 

@@ -19,4 +19,10 @@
   :passed: 3
   :failed: 0
   :ignored: 0
-:stdout: []
+:stdout:
+- "2 \t0 \t0"
+- '0'
+- "1 \t0 \t0"
+- '0'
+- "0 \t1 \t1"
+- '1'

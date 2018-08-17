@@ -46,7 +46,7 @@
 
 uint16_t swdSwSeq;
 uint8_t test8;
-uint32_t bitread;
+uint32_t *bitread=0;
 volatile uint32_t *idCode=0;
 uint32_t *bitread_lsb;
 int testparity;
@@ -160,7 +160,7 @@ int main(void)
   lineReset();
   swdWriteBits(SW_EQ_CODE,16);
   lineReset();
-  //status=SwdApDpRequest();
+  status=SwdApDpRequest(DP_RD_IDCODE,&bitread);
 
   //swdWriteBits(SW_IDCODE_RD,8);
   //bitread = SWDIO_Pin;

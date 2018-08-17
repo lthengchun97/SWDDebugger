@@ -110,7 +110,7 @@ void test_testmock_read_bit(void)
 
 {
 
-  getSwdio_CMockExpectAndReturn(58, 0);
+  setSwdioHigh_CMockExpect(58);
 
   setClockHigh_CMockExpect(59);
 
@@ -122,7 +122,7 @@ void test_testmock_read_bit(void)
 
 
 
-  getSwdio_CMockExpectAndReturn(64, 0);
+  setSwdioLow_CMockExpect(64);
 
   setClockHigh_CMockExpect(65);
 
@@ -134,6 +134,64 @@ void test_testmock_read_bit(void)
 
 
 
-  swdReadBits(2);
+  setSwdioLow_CMockExpect(70);
+
+  setClockHigh_CMockExpect(71);
+
+  swdDelay_CMockExpect(72);
+
+  setClockLow_CMockExpect(73);
+
+  swdDelay_CMockExpect(74);
+
+
+
+  swdWriteBits(0x001,3);
+
+
+
+  getSwdio_CMockExpectAndReturn(78, 0);
+
+  setClockHigh_CMockExpect(79);
+
+  swdDelay_CMockExpect(80);
+
+  setClockLow_CMockExpect(81);
+
+  swdDelay_CMockExpect(82);
+
+
+
+  getSwdio_CMockExpectAndReturn(84, 0);
+
+  setClockHigh_CMockExpect(85);
+
+  swdDelay_CMockExpect(86);
+
+  setClockLow_CMockExpect(87);
+
+  swdDelay_CMockExpect(88);
+
+
+
+  getSwdio_CMockExpectAndReturn(90, 1);
+
+  setClockHigh_CMockExpect(91);
+
+  swdDelay_CMockExpect(92);
+
+  setClockLow_CMockExpect(93);
+
+  swdDelay_CMockExpect(94);
+
+
+
+  uint32_t data = swdReadBits(2);
+
+  UnityAssertEqualNumber((UNITY_INT)((1)), (UNITY_INT)((data)), (
+
+ ((void *)0)
+
+ ), (UNITY_UINT)(97), UNITY_DISPLAY_STYLE_INT);
 
 }

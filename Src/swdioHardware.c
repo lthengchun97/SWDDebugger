@@ -70,7 +70,7 @@ void swdReadTurnAround(){
 	setClockHigh();
 	swdDelay();
 	setClockLow();
-	Delay();
+	swdDelay();
 }
 
 void swdWriteTurnAround(){

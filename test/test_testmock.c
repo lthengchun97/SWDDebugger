@@ -55,17 +55,44 @@ void test_testmock_write_bits(void)
 
 void test_testmock_read_bit(void)
 {
-  getSwdio_ExpectAndReturn(0);
+  setSwdioHigh_Expect();      // 1
   setClockHigh_Expect();
   swdDelay_Expect();
   setClockLow_Expect();
   swdDelay_Expect();
+
+  setSwdioLow_Expect();      // 0
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  setSwdioLow_Expect();      // 0
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  swdWriteBits(0x001,3);
 
   getSwdio_ExpectAndReturn(0);
   setClockHigh_Expect();
   swdDelay_Expect();
   setClockLow_Expect();
   swdDelay_Expect();
+  
+  getSwdio_ExpectAndReturn(0);
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
 
-  swdReadBits(2);
+  getSwdio_ExpectAndReturn(1);
+  setClockHigh_Expect();
+  swdDelay_Expect();
+  setClockLow_Expect();
+  swdDelay_Expect();
+
+  uint32_t data = swdReadBits(2);
+  TEST_ASSERT_EQUAL(1,data);
 }
