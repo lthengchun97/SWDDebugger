@@ -63,7 +63,6 @@ void swdWrite32BitsWithParity(uint32_t *data);
 void swdReadAck(int *dataRead);
 void swdRead32Bits(uint32_t *dataRead);
 void lineReset();
-int calculateReadParity(uint32_t data);
 void swdRead32BitsWithParity(uint32_t *data);
 uint32_t readMcuRegister(uint32_t regNum);
 void writeMcuRegister(uint32_t regNum, uint32_t data);

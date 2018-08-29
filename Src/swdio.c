@@ -90,25 +90,6 @@ void swdRead32BitsWithParity(uint32_t *data){
 	//actualParity = calculateParity32bitData(data);
 }
 
-int calculateReadParity(uint32_t data)
-{
-	int i , sum = 0;
-
-	for (i = 0 ; i < 32 ; i ++)
-	{
-		if (data & 0x01)
-			sum ++ ;
-
-		data = data >> 1;
-	}
-
-	if (sum & 1)
-		return 1 ;
-	else
-		return 0 ;
-}
-
-
 SwdStatus SwdApDpRequest(uint8_t request,uint32_t *data){
 	int ack=0;
 	*data = 0;
