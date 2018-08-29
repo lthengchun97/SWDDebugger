@@ -23,8 +23,6 @@ void setSwdioHigh();
 void setSwdioLow();
 void setClockHigh();
 void setClockLow();
-//void setSwdio(uint32_t data,int bitsize);
-//uint32_t swdReadBitsHardware(int bitsize,uint32_t *data);
 void swdReadTurnAround();
 void swdWriteTurnAround();
 void idleClock();

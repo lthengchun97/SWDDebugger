@@ -42,7 +42,8 @@
 
 
 int getSwdio(){
-	return HAL_GPIO_ReadPin(SWD_IO_PORT,SWDIO_Pin);
+	return ((HAL_GPIO_ReadPin(SWD_IO_PORT, SWDIO_Pin)) ? 1 : 0);
+	//return HAL_GPIO_ReadPin(SWD_IO_PORT,SWDIO_Pin);
 }
 
 void setSwdioHigh(){

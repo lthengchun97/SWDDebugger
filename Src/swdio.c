@@ -83,6 +83,32 @@ void swdWrite32BitsWithParity(uint32_t *data){
 	swdWriteBits(computeParityBit(data),1);
 }
 
+void swdRead32BitsWithParity(uint32_t *data){
+	//int actualParity;
+	swdRead32Bits(data);
+	swdReadBit();
+	//actualParity = calculateParity32bitData(data);
+}
+
+int calculateReadParity(uint32_t data)
+{
+	int i , sum = 0;
+
+	for (i = 0 ; i < 32 ; i ++)
+	{
+		if (data & 0x01)
+			sum ++ ;
+
+		data = data >> 1;
+	}
+
+	if (sum & 1)
+		return 1 ;
+	else
+		return 0 ;
+}
+
+
 SwdStatus SwdApDpRequest(uint8_t request,uint32_t *data){
 	int ack=0;
 	*data = 0;
@@ -96,9 +122,72 @@ SwdStatus SwdApDpRequest(uint8_t request,uint32_t *data){
 		}
 	else
 		{
-		swdRead32Bits(data);
+		swdRead32BitsWithParity(data);
 		swdWriteTurnAround();
 		}
 	}
 	swdWriteBits(0,3);
+}
+
+void readAPIDCode(){
+	SwdApDpRequest(DP_WR_CTRL_STAT,0x5000);
+}
+
+
+
+uint32_t readMcuRegister(uint32_t regNum){
+	uint32_t *data;
+	//set 32-bit access in AP_CSW
+	setCSW32Bits();
+	//write DCRSR to AP_TAR
+	writeDCRSRtoTAR();
+	//write regNum to AP_DRW
+	writeRegNumtoDRW(regNum);
+	//write DCRDR to AP_TAR
+	writeDCRDRtoTAR();
+
+	//read AP_DRW
+	SwdApDpRequest(AP_RD_DRW,&data);
+	//read DP_RDBUFF
+	SwdApDpRequest(DP_RD_BUFF,&data);
+
+	//return value read
+	return *data;
+}
+
+void writeMcuRegister(uint32_t regNum, uint32_t data){
+	//set 32-bit access in AP_CSW
+	setCSW32Bits();
+	//write DCRDR to AP_TAR
+	writeDCRDRtoTAR();
+	//write data to AP_DRW
+	writeDatatoDRW(data);
+	//write DCRSR to AP_TAR
+	writeDCRSRtoTAR();
+	//write (regNum | regWriteBit) to AP_DRW
+}
+
+void setCSW32Bits(){
+	SwdApDpRequest(AP_WR_CSW,0);		// select bank 0
+	SwdApDpRequest(AP_WR_CSW,BITS_32_WIDE);
+}
+
+void writeDCRSRtoTAR(){
+	SwdApDpRequest(AP_WR_TAR,0);		// select bank 0
+	SwdApDpRequest(AP_WR_TAR,DCRSR);
+}
+
+void writeRegNumtoDRW(uint32_t regNum){
+	SwdApDpRequest(AP_WR_DRW,0);		// select bank 0
+	SwdApDpRequest(AP_WR_DRW,regNum);
+}
+
+void writeDCRDRtoTAR(){
+	SwdApDpRequest(AP_WR_TAR,0);		// select bank 0
+	SwdApDpRequest(AP_WR_TAR,DCRDR);
+}
+
+void writeDatatoDRW(uint32_t data){
+	SwdApDpRequest(AP_WR_DRW,0);		// select bank 0
+	SwdApDpRequest(AP_WR_DRW,data);
 }
