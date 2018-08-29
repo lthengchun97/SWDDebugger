@@ -8,32 +8,28 @@
 #include "swdio.h"
 #include <stdint.h>
 
-uint32_t *data=0;
+//uint32_t *data=0;
 
 void swdWriteBit(uint32_t bit){
 	if(bit==1){
 		setSwdioHigh();
-		setClockHigh();
-		swdDelay();
-		setClockLow();
-		swdDelay();
 	}
 	else{
 		setSwdioLow();
-		setClockHigh();
-		swdDelay();
-		setClockLow();
-		swdDelay();
 	}
-}
-
-int swdReadBit(){
-	int bit;
-	bit =getSwdio();
 	setClockHigh();
 	swdDelay();
 	setClockLow();
 	swdDelay();
+}
+
+int swdReadBit(){
+	int bit=0	;
+	setClockHigh();
+	swdDelay();
+	setClockLow();
+	swdDelay();
+	bit =getSwdio();
 	return bit;
 }
 
@@ -46,18 +42,22 @@ void swdWriteBits(uint32_t data,int bitsize){
 	}
 }
 
-uint32_t swdReadBits(int bitsize){
-	int i;
-	uint32_t bit=0,data=0;
-	for(i=bitsize;i>=0;i--){
+void swdReadBits(int bitsize,uint32_t *dataRead){
+	int i,bit;
+	*dataRead = 0;
+	//uint32_t bit=0,data=0;
+	for(i=0;i< bitsize;i++){
 		bit = swdReadBit();
-		data =data| (bit<<i);
+		*dataRead =*dataRead| (bit<<i);
 	}
-	return data;
 }
 
-uint32_t swdReadAck(){
-	return swdReadBits(2);
+void swdReadAck(int *dataRead){
+	swdReadBits(3,(uint32_t *)dataRead);
+}
+
+void swdRead32Bits(uint32_t *dataRead){
+	 swdReadBits(32,dataRead);
 }
 
 void lineReset(){
@@ -67,16 +67,6 @@ void lineReset(){
 	{
 		idleClock();
 	}
-}
-
-int computeParity(uint32_t data){
-	data = (data & 0x0000FFFF) ^ (data >>16);
-	data = (data & 0x000000FF) ^ (data >> 8);
-	data = (data & 0x0000000F) ^ (data >> 4);
-	data = (data & 0x00000003) ^ (data >> 2);
-	data = (data & 0x00000001) ^ (data >> 1);
-
-	return data&1;
 }
 
 int computeParityBit (uint32_t data){
@@ -94,19 +84,20 @@ void swdWrite32BitsWithParity(uint32_t *data){
 }
 
 SwdStatus SwdApDpRequest(uint8_t request,uint32_t *data){
-	uint8_t ack=0;
+	int ack=0;
+	*data = 0;
 	swdWriteBits(request,8);
 	swdReadTurnAround();
-	ack = swdReadAck();
-	if(ack != SW_ACK_OK){
+	swdReadAck(&ack);
+	if(ack == SW_ACK_OK){
 	if (request & 0x04){
-		*data = swdReadBits(32);
 		swdWriteTurnAround();
+		swdWrite32BitsWithParity(data);
 		}
 	else
 		{
+		swdRead32Bits(data);
 		swdWriteTurnAround();
-		swdWrite32BitsWithParity(data);
 		}
 	}
 	swdWriteBits(0,3);

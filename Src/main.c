@@ -161,6 +161,7 @@ int main(void)
   swdWriteBits(SW_EQ_CODE,16);
   lineReset();
   status=SwdApDpRequest(DP_RD_IDCODE,&bitread);
+  //status=SwdApDpRequest(DP_RD_IDCODE,&bitread);
 
   //swdWriteBits(SW_IDCODE_RD,8);
   //bitread = SWDIO_Pin;

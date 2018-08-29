@@ -16,7 +16,7 @@ typedef unsigned char SwdStatus;
 
 
 #define	SW_EQ_CODE				(0xe79e)
-#define DP_RD_IDCODE			(0x85)
+#define DP_RD_IDCODE			(0xA1)
 #define DP_WR_ABORT				(0xA1)
 #define DP_RD_CTRL_STAT			(0xB5)
 #define DP_WR_CTRL_STAT			(0x91)
@@ -41,13 +41,14 @@ typedef unsigned char SwdStatus;
 
 void swdWriteBit(uint32_t bit);
 void swdWriteBits(uint32_t data,int bitsize);
-uint32_t swdReadBits(int bitsize);
+void swdReadBits(int bitsize,uint32_t *dataRead);
 SwdStatus SwdApDpRequest(uint8_t request,uint32_t *data);
 void setSwdio(uint32_t data,int bitsize);
 int computeParityBit (uint32_t data);
 int computeParity(uint32_t data);
 void swdWrite32BitsWithParity(uint32_t *data);
-uint32_t swdReadAck();
+void swdReadAck(int *dataRead);
+void swdRead32Bits(uint32_t *dataRead);
 void lineReset();
 
 #endif /* SWDIO_H_ */
